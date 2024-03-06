@@ -28,16 +28,31 @@ public class CartService {
         Optional<Cart> optionalCart = cartRepo.findByUserIdAndCartStatus(userId, CartStatus.InUse);
 
         //Create cart if not created
-        Cart cart = optionalCart.orElseGet(Cart::new);
+        Cart cart = null;
+        if(optionalCart.isEmpty()) {
+            cart = new Cart();
+            cart.setCartStatus(CartStatus.InUse);
+            cart.setUserId(userId);
+            try{
+                cartRepo.save(cart);
+            }
+            catch (Exception e){
+                System.out.println("Cart  "+ e.getMessage());
+            }
+        }
+        else {
+            cart = optionalCart.get();
+        }
 
         CartProduct cartProduct = new CartProduct();
         cartProduct.setProductId(productId);
-        cartProduct.setCart(cart);
         cartProduct.setQuantity(quantity);
         try{
+            cartProduct.setCart(cart);
             cartProductRepo.save(cartProduct);
         }catch (Exception e){
-            return "Can't Perform this action";
+            System.out.println("CartProduct  "+ e.getMessage());
+            return "Can't Save Product";
         }
         return "Product Added Successfully";
     }
@@ -55,7 +70,12 @@ public class CartService {
         }
         CartProduct cartProduct = optionalCartProduct.get();
         cartProduct.setQuantity(cartProduct.getQuantity()-quantity);
-        cartProductRepo.save(cartProduct);
+        if(cartProduct.getQuantity() <= 0){
+            cartProductRepo.delete(cartProduct);
+        }
+        else {
+            cartProductRepo.save(cartProduct);
+        }
         return "Action performed Successfully";
     }
 

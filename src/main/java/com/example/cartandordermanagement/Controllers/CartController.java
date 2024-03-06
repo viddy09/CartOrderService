@@ -55,6 +55,7 @@ public class CartController {
             cartDetailsDTO = cartService.getCartDetails(userId);
             responseEntity = new ResponseEntity<>(cartDetailsDTO, HttpStatus.OK);
         }catch (Exception e){
+            System.out.println("CartDetails  "+ e.getMessage());
             responseEntity = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return responseEntity;

@@ -24,6 +24,7 @@ public class OrderController {
             orderDTO = orderService.placeOrder(userId);
             responseEntity = new ResponseEntity<>(orderDTO, HttpStatus.OK);
         }catch (Exception e){
+            System.out.println("Order Placed Unsuccessfull "+e.getMessage());
             responseEntity = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return responseEntity;
@@ -37,6 +38,19 @@ public class OrderController {
         try{
             status = orderService.getOrderStatus(orderId);
             responseEntity = new ResponseEntity<>(status, HttpStatus.OK);
+        }catch (Exception e){
+            responseEntity = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return responseEntity;
+    }
+
+    //Update Order Status
+    @PostMapping("/updateStatus")
+    public ResponseEntity<Void> updateOrderStatus(@RequestBody OrderDTO orderDTO){
+        ResponseEntity<Void> responseEntity;
+        try{
+            orderService.updateOrderStatus(orderDTO.getOrderId(), orderDTO.getStatus());
+            responseEntity = new ResponseEntity<>(HttpStatus.OK);
         }catch (Exception e){
             responseEntity = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

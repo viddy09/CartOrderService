@@ -10,4 +10,6 @@ public interface CartProductRepo extends JpaRepository<CartProduct, Long> {
     Optional<CartProduct> findByCart_IdAndProductId(Long cartId, String productId);
 
     Optional<List<CartProduct>> findByCart_Id(Long cartId);
+    @Override
+    CartProduct save(CartProduct cartProduct);
 }

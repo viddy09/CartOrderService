@@ -10,11 +10,9 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "carts")
 public class Cart extends BaseModel{
     private String userId;
-    @OneToMany(mappedBy = "cart")
-    @JsonBackReference
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
     private List<CartProduct> products;
     @Enumerated(EnumType.ORDINAL)
     private CartStatus cartStatus;

@@ -8,4 +8,6 @@ import java.util.Optional;
 
 public interface CartRepo extends JpaRepository<Cart, Long> {
     Optional<Cart> findByUserIdAndCartStatus(String userId, CartStatus cartStatus);
+    @Override
+    Cart save(Cart cart);
 }
